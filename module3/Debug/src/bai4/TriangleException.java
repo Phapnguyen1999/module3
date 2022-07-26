@@ -1,2 +1,4 @@
-package bai4;public class TriangleException {
+package bai4;
+
+public class TriangleException {
 }

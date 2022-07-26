@@ -2,7 +2,7 @@ package bai3;
 
 import java.util.Scanner;
 
-public class Calculator {
+public class CalculationExample {
     public void cong(int a, int b) {
         System.out.println("tổng : " + (a + b));
     }
@@ -19,7 +19,7 @@ public class Calculator {
     }
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        Calculator cal = new CalculationExample();
+        CalculationExample cal = new CalculationExample();
         System.out.println("Nhập a, b");
         int a = scanner.nextInt();
         int b = scanner.nextInt();
