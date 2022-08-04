@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>demo</title>
+    <style>
+        p,h1{
+            color: red;
+        }
+        /*div p {*/
+        /*    color: blue;*/
+        /*}*/
+        div>p{
+            color: brown;
+        }
+        div~p{
+            font-size: 30px;
+        }
+    /* + : lấy thẻ nằm ngay sau cùng cấp
+       ~ : lấy tất cả thẻ nằm sau cùng cấp
+       div p: lấy tất cả thẻ p là con cháu nằm trong div
+       div > p lấy thẻ con p nằm sau thẻ div
+    */
+        p.tets{
+            font-family: "Arial Black";
+        }
+        input[type=button]{
+            background-color: aqua;
+        }
+    </style>
+</head>
+<body>
+    <section>
+        <h1 class="tets">TEST 1</h1>
+        <div>
+            <p class="tets">TEST 2</p>
+            <p>TEST 3</p>
+            <ul>
+                <li>Phap</li>
+                <li>Thanh</li>
+                <li>
+                    <p>ABCD</p>
+                </li>
+                <li>Trung</li>
+            </ul>
+        </div>
+        <p>TEST 4</p>
+        <p class="tets">TEST 5</p>
+        <input type="button" value="BUTTON"></input>
+    </section>
+</body>
+</html>
