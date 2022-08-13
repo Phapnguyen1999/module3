@@ -8,21 +8,22 @@ import model.Product;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
-import javax.validation.ConstraintViolation;
-import javax.validation.Validation;
-import javax.validation.Validator;
-import javax.validation.ValidatorFactory;
+import javax.validation.*;
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.*;
 
 @WebServlet(name = "productServlet", value = "/products")
+@MultipartConfig(fileSizeThreshold = 1024 * 1024 * 2,
+        maxFileSize = 1024 * 1024 * 10,
+        maxRequestSize = 1024 * 1024 * 50)
 public class ProductServlet extends HttpServlet {
     IProductDAO iProductDAO;
     ICategoryDAO iCategoryDAO;
@@ -115,8 +116,8 @@ public class ProductServlet extends HttpServlet {
     private void showFormEdit(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         int id = Integer.parseInt(request.getParameter("id"));
         Product existingProduct = iProductDAO.selectProduct(id);
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/product/edit.jsp");
         request.setAttribute("product", existingProduct);
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/product/edit.jsp");
         dispatcher.forward(request, response);
     }
 
@@ -158,7 +159,6 @@ public class ProductServlet extends HttpServlet {
 
         Product newProduct = new Product(id,name,img, quantity, price, idCategory,deleted);
         iProductDAO.updateProduct(newProduct);
-//        response.sendRedirect("products");
         request.setAttribute("success", "Insert product is success.");
         request.getRequestDispatcher("/product?action=list").forward(request, response);
     }
@@ -169,7 +169,7 @@ public class ProductServlet extends HttpServlet {
         try {
 
             String name = request.getParameter("name");
-            String img =request.getParameter("img");
+//            String img =request.getParameter("img");
 
             int quantity = 0;
             if (request.getParameter("quantity") != "") {
@@ -181,26 +181,24 @@ public class ProductServlet extends HttpServlet {
                 price = Double.parseDouble(request.getParameter("price"));
             }
             int deleted =0;
-
-            product = new Product(name, img, quantity, price,idcategory,deleted);
+            product = new Product(name, quantity, price,idcategory,deleted);
             for (Part part : request.getParts()) {
                 System.out.println("Content type of Part" + part.getContentType());
                 System.out.println("Name of Part" + part.getName());
-                if(part.getName().equals("file")){
+                if(part.getName().equals("img")){
                     String fileName = extractFileName(part);
                     // refines the fileName in case it is an absolute path
                     fileName = new File(fileName).getName();
                     //part.write(this.getFolderUpload().getAbsolutePath() + File.separator + fileName);
-                    part.write("Users\\macbookpro\\Documents\\module3\\module3/\\product_manage\\src\\main\\webapp\\images" + fileName);
+                    part.write("/Users/macbookpro/Documents/module3/module3/Product_manage/src/main/webapp/images/" + fileName);
 
-                    String servletRealPath = this.getServletContext().getRealPath("/") + "\\images\\" + fileName;
+                    String servletRealPath = this.getServletContext().getRealPath("/") + "/images/" + fileName;
                     System.out.println("servletRealPath: " + servletRealPath);
                     part.write(servletRealPath);
-                    product.setImg("images\\" + fileName);
-
+                    product.setImg(fileName);
                 }
-
             }
+
 
             ValidatorFactory validatorFactory = Validation.buildDefaultValidatorFactory();
             Validator validator = validatorFactory.getValidator();

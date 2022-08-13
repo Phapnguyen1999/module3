@@ -159,7 +159,8 @@
                                         <tr>
                                             <td><c:out value="${product.getId()}"/></td>
                                             <td><c:out value="${product.getName()}"/></td>
-                                            <td><c:out value="${product.getImg()}"/></td>
+<%--                                            <td><c:out value="${product.getImg()}"/></td>--%>
+                                            <td><img src="images/${product.getImg()}" width="40px" height="60px"></td>
                                             <td><c:out value="${product.getQuantity()}"/></td>
                                             <td>
                                                 <c:set var="price" value="${product.getPrice()}"/>

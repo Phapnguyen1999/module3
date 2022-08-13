@@ -46,4 +46,12 @@ public class Product {
         this.price=price;
         this.idCategory=idCategory;
     }
+
+    public Product(String name, int quantity, double price, int idCategory, int deleted) {
+        this.name=name;
+        this.quantity=quantity;
+        this.price=price;
+        this.idCategory=idCategory;
+        this.deleted=deleted;
+    }
 }
