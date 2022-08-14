@@ -7,7 +7,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Diamond Shop</title>
+    <title>Diamond Store</title>
     <jsp:include page="/WEB-INF/layout/meta_css.jsp"></jsp:include>
 </head>
 
@@ -20,55 +20,13 @@
         <div class="navbar-custom">
             <div class="container-fluid">
                 <ul class="list-unstyled topnav-menu float-right mb-0">
-
                     <li class="dropdown notification-list">
                         <a class="nav-link dropdown-toggle nav-user mr-0 waves-effect waves-light"
                            data-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
-                            <img src="assets\images\users\avatar-1.jpg" alt="user-image" class="rounded-circle">
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-right profile-dropdown ">
-                            <!-- item-->
-                            <div class="dropdown-header noti-title">
-                                <h6 class="text-overflow m-0">Welcome !</h6>
-                            </div>
-
-                            <!-- item-->
-                            <a href="javascript:void(0);" class="dropdown-item notify-item">
-                                <i class="mdi mdi-account-outline"></i>
-                                <span>Profile</span>
-                            </a>
-
-                            <!-- item-->
-                            <a href="javascript:void(0);" class="dropdown-item notify-item">
-                                <i class="mdi mdi-settings-outline"></i>
-                                <span>Settings</span>
-                            </a>
-
-                            <!-- item-->
-                            <a href="javascript:void(0);" class="dropdown-item notify-item">
-                                <i class="mdi mdi-lock-outline"></i>
-                                <span>Lock Screen</span>
-                            </a>
-
-                            <div class="dropdown-divider"></div>
-
-                            <!-- item-->
-                            <a href="javascript:void(0);" class="dropdown-item notify-item">
-                                <i class="mdi mdi-logout-variant"></i>
-                                <span>Logout</span>
-                            </a>
-
-                        </div>
-                    </li>
-
-                    <li class="dropdown notification-list">
-                        <a href="/products?action=login" class="nav-link right-bar-toggle waves-effect waves-light">
-                            <i class="">Login</i>
+                            <img src="assets\images\users\phap.png" alt="user-image" class="rounded-circle">
                         </a>
                     </li>
-
                 </ul>
-
                 <!-- LOGO -->
                 <div class="logo-box">
                     <a href="/product?create=list" class="logo text-center">
@@ -81,10 +39,7 @@
                                     </span>
                     </a>
                 </div>
-
-
                 <ul class="list-unstyled topnav-menu topnav-menu-left m-0">
-
                     <li class="d-none d-sm-block">
                         <form class="app-search">
                             <div class="app-search-box">
@@ -105,7 +60,6 @@
             </div>
         </div>
         <!-- end Topbar -->
-
         <div class="topbar-menu">
             <div class="container-fluid">
                 <div id="navigation" class="active">
@@ -113,18 +67,15 @@
                     <ul class="navigation-menu in">
 
                         <li class="has-submenu active">
-                            <a href="/products?action=list" class="active"> <i class="mdi mdi-view-dashboard"></i>Product</a>
+                            <a href="/products?action=list" class="active"> <i class="fa fa-list"></i>Product</a>
                         </li>
-
                         <li class="has-submenu">
                             <a href="/products?action=create">
-                                <i class="mdi mdi-layers"></i>Create product
+                                <i class="fa fa-plus"></i>Create product
                             </a>
                         </li>
-
                     </ul>
                     <!-- End navigation menu -->
-
                     <div class="clearfix"></div>
                 </div>
                 <!-- end #navigation -->
@@ -184,31 +135,39 @@
                                     </c:forEach>
                                     </tbody>
                                 </table>
+                                <script>
+
+                                </script>
+                                <
                                 <div class="row w-100">
                                     <div class="col-12  d-flex justify-content-center border-0 text-white">
                                         <div class="container-fluid mt-2">
                                             <div class="float-right">
                                                 <%--For displaying Previous link except for the 1st page --%>
                                                 <c:if test="${currentPage != 1}">
-                                                    <a href="products?page=${currentPage - 1}&search=${requestScope.search}" class="p-2 mr-1 border">Previous</a>
+                                                    <a href="products?page=${currentPage - 1}&search=${requestScope.search}"
+                                                       class="p-2 mr-1 border">Previous</a>
                                                 </c:if>
 
                                                 <%--For displaying Page numbers.
                                                 The when condition does not display a link for the current page--%>
-                                                        <c:forEach begin="1" end="${noOfPages}" var="i">
-                                                            <c:choose>
-                                                                <c:when test="${currentPage eq i}">
-                                                                    <a href="products?page=${i}" class="p-2 mr-1 border">${i}</a>
-                                                                </c:when>
-                                                                <c:otherwise>
-                                                                        <a href="products?page=${i}&search=${requestScope.search}" class="p-2 mr-1 border">${i}</a>
-                                                                </c:otherwise>
-                                                            </c:choose>
-                                                        </c:forEach>
+                                                <c:forEach begin="1" end="${noOfPages}" var="i">
+                                                    <c:choose>
+                                                        <c:when test="${currentPage eq i}">
+                                                            <a href="products?page=${i}"
+                                                               class="p-2 mr-1 border">${i}</a>
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            <a href="products?page=${i}&search=${requestScope.search}"
+                                                               class="p-2 mr-1 border">${i}</a>
+                                                        </c:otherwise>
+                                                    </c:choose>
+                                                </c:forEach>
 
                                                 <%--For displaying Next link: lt < noOfPages--%>
                                                 <c:if test="${currentPage < noOfPages}">
-                                                    <a href="products?page=${currentPage + 1}&search=${requestScope.search}" class="p-2 mr-1 border">Next</a>
+                                                    <a href="products?page=${currentPage + 1}&search=${requestScope.search}"
+                                                       class="p-2 mr-1 border">Next</a>
                                                 </c:if>
                                             </div>
                                         </div>

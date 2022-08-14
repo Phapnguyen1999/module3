@@ -97,7 +97,6 @@ public class ProductServlet extends HttpServlet {
 //        RequestDispatcher dispatcher = request.getRequestDispatcher("product/edit.jsp");
 //        dispatcher.forward(request, response);
     }
-
     private void showListProduct(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         List<Product> products = iProductDAO.selectAllProduct();
         request.setAttribute("products", products);
@@ -192,19 +191,15 @@ public class ProductServlet extends HttpServlet {
                 System.out.println("Name of Part" + part.getName());
                 if(part.getName().equals("img")){
                     String fileName = extractFileName(part);
-                    // refines the fileName in case it is an absolute path
                     fileName = new File(fileName).getName();
-                    //part.write(this.getFolderUpload().getAbsolutePath() + File.separator + fileName);
                     part.write("/Users/macbookpro/Documents/module3/module3/Product_manage/src/main/webapp/images/" + fileName);
 
-                    String servletRealPath = this.getServletContext().getRealPath("/") + "/images/" + fileName;
+                    String servletRealPath = this.getServletContext().getRealPath("/") + "images/" + fileName;
                     System.out.println("servletRealPath: " + servletRealPath);
                     part.write(servletRealPath);
                     product.setImg(fileName);
                 }
             }
-
-
             ValidatorFactory validatorFactory = Validation.buildDefaultValidatorFactory();
             Validator validator = validatorFactory.getValidator();
 
@@ -222,7 +217,6 @@ public class ProductServlet extends HttpServlet {
                 iProductDAO.insertProduct(product);
                 Product pro = new Product();
                 request.setAttribute("product", pro);
-
                 request.setAttribute("success", "Insert Success!");
                 RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/product/create.jsp");
                 requestDispatcher.forward(request, response);

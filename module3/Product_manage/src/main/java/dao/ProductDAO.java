@@ -11,7 +11,7 @@ public class ProductDAO implements IProductDAO {
     private String jdbcUsername = "root";
     private String jdbcPassword = "12345678";
 
-    private static final String INSERT_PRODUCT_SQL = "INSERT INTO product (name,img,quantity,price,idCategory,deleted) VALUES (?,?, ?, ?, ?,?);";
+    private static final String INSERT_PRODUCT_SQL = "INSERT INTO product (name,img,quantity,price,idCategory,deleted) VALUES (?, ?, ?, ?, ?, ?);";
     private static final String SELECT_PRODUCT_BY_ID = "select id,name,img,quantity,price,idCategory,deleted from product where id =?";
     private static final String SELECT_ALL_PRODUCTS = "select * from product where deleted=0";
     private static final String DELETE_PRODUCT_SQL = "update product set deleted = 1 where id = ?;";
