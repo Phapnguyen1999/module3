@@ -9,6 +9,7 @@
     <meta charset="utf-8">
     <title>Diamond Shop</title>
     <jsp:include page="/WEB-INF/layout/meta_css.jsp"></jsp:include>
+    <link href="/assets\libs\toastr\toastr.min.css" rel="stylesheet" type="text/css">
 </head>
 
 <body data-layout="horizontal">
@@ -221,6 +222,34 @@
 <!-- END wrapper -->
 
 <jsp:include page="/WEB-INF/layout/footer_js.jsp"></jsp:include>
+<script src="/assets\libs\toastr\toastr.min.js"></script>
+<script src="/assets\js\pages\toastr.init.js"></script>
+<c:if test="${requestScope.success!=null}">
+    <script>
+        $(document).ready(function () {
+            <% String success= (String) request.getAttribute("success"); %>
+            var js_Success = "<%= success %>";
+            toastr.options = {
+                "closeButton": true,
+                "debug": false,
+                "newestOnTop": false,
+                "progressBar": false,
+                "positionClass": "toast-top-right",
+                "preventDuplicates": false,
+                "onclick": null,
+                "showDuration": "300",
+                "hideDuration": "1000",
+                "timeOut": "5000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            }
+            toastr["success"](js_Success)
+        });
+    </script>
+</c:if>
 </body>
 
 </html>

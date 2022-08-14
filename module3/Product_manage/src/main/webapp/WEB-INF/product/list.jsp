@@ -159,7 +159,7 @@
                                         <tr>
                                             <td><c:out value="${product.getId()}"/></td>
                                             <td><c:out value="${product.getName()}"/></td>
-<%--                                            <td><c:out value="${product.getImg()}"/></td>--%>
+                                                <%--                                            <td><c:out value="${product.getImg()}"/></td>--%>
                                             <td><img src="images/${product.getImg()}" width="40px" height="60px"></td>
                                             <td><c:out value="${product.getQuantity()}"/></td>
                                             <td>
@@ -184,35 +184,35 @@
                                     </c:forEach>
                                     </tbody>
                                 </table>
-                                <div>
-                                    <%--For displaying Previous link except for the 1st page --%>
-                                    <c:if test="${currentPage != 1}">
-                                        <a href="products?page=${currentPage - 1}&search=${requestScope.search}">Previous</a>
-                                    </c:if>
+                                <div class="row w-100">
+                                    <div class="col-12  d-flex justify-content-center border-0 text-white">
+                                        <div class="container-fluid mt-2">
+                                            <div class="float-right">
+                                                <%--For displaying Previous link except for the 1st page --%>
+                                                <c:if test="${currentPage != 1}">
+                                                    <a href="products?page=${currentPage - 1}&search=${requestScope.search}" class="p-2 mr-1 border">Previous</a>
+                                                </c:if>
 
-                                    <%--For displaying Page numbers.
-                                    The when condition does not display a link for the current page--%>
-                                    <table border="1" cellpadding="5" cellspacing="5">
-                                        <tr>
-                                            <c:forEach begin="1" end="${noOfPages}" var="i">
-                                                <c:choose>
-                                                    <c:when test="${currentPage eq i}">
-                                                        <td>${i}</td>
-                                                    </c:when>
-                                                    <c:otherwise>
-                                                        <td>
-                                                            <a href="products?page=${i}&search=${requestScope.search}">${i}</a>
-                                                        </td>
-                                                    </c:otherwise>
-                                                </c:choose>
-                                            </c:forEach>
-                                        </tr>
-                                    </table>
+                                                <%--For displaying Page numbers.
+                                                The when condition does not display a link for the current page--%>
+                                                        <c:forEach begin="1" end="${noOfPages}" var="i">
+                                                            <c:choose>
+                                                                <c:when test="${currentPage eq i}">
+                                                                    <a href="products?page=${i}" class="p-2 mr-1 border">${i}</a>
+                                                                </c:when>
+                                                                <c:otherwise>
+                                                                        <a href="products?page=${i}&search=${requestScope.search}" class="p-2 mr-1 border">${i}</a>
+                                                                </c:otherwise>
+                                                            </c:choose>
+                                                        </c:forEach>
 
-                                    <%--For displaying Next link: lt < noOfPages--%>
-                                    <c:if test="${currentPage lt noOfPages}">
-                                        <a href="products?page=${currentPage + 1}&search=${requestScope.search}">Next</a>
-                                    </c:if>
+                                                <%--For displaying Next link: lt < noOfPages--%>
+                                                <c:if test="${currentPage < noOfPages}">
+                                                    <a href="products?page=${currentPage + 1}&search=${requestScope.search}" class="p-2 mr-1 border">Next</a>
+                                                </c:if>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>

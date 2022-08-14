@@ -54,4 +54,9 @@ public class Product {
         this.idCategory=idCategory;
         this.deleted=deleted;
     }
+
+    public Product(int id, int deleted) {
+        this.id=id;
+        this.deleted=deleted;
+    }
 }

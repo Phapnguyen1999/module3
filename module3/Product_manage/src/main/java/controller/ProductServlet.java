@@ -92,15 +92,7 @@ public class ProductServlet extends HttpServlet {
 
     private void deleteProduct(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException, ServletException {
         int id = Integer.parseInt(request.getParameter("id"));
-        String name = request.getParameter("name");
-        String img=request.getParameter("img");
-        int quantity = Integer.parseInt(request.getParameter("quantity"));
-        double price = Double.parseDouble(request.getParameter("price"));
-        int idCategory = Integer.parseInt(request.getParameter("idCategory"));
-        int deleted=Integer.parseInt(request.getParameter("1"));
-
-        Product newProduct = new Product(id, name,img, quantity, price, idCategory,deleted);
-        iProductDAO.updateProduct(newProduct);
+        iProductDAO.deleteProduct(id);
         response.sendRedirect("products");
 //        RequestDispatcher dispatcher = request.getRequestDispatcher("product/edit.jsp");
 //        dispatcher.forward(request, response);
@@ -151,7 +143,21 @@ public class ProductServlet extends HttpServlet {
     private void updateProduct(HttpServletRequest request, HttpServletResponse response) throws IOException, SQLException, ServletException {
         int id=Integer.parseInt(request.getParameter("id"));
         String name = request.getParameter("name");
-        String img=request.getParameter("img");
+        String img=null;
+        for (Part part : request.getParts()) {
+            System.out.println("Content type of Part" + part.getContentType());
+            System.out.println("Name of Part" + part.getName());
+            if(part.getName().equals("img")){
+                String fileName = extractFileName(part);
+                fileName = new File(fileName).getName();
+                part.write("/Users/macbookpro/Documents/module3/module3/Product_manage/src/main/webapp/images/" + fileName);
+
+                String servletRealPath = this.getServletContext().getRealPath("/") + "/images/" + fileName;
+                System.out.println("servletRealPath: " + servletRealPath);
+                part.write(servletRealPath);
+                img=fileName;
+            }
+        }
         int quantity = Integer.parseInt(request.getParameter("quantity"));
         double price = Double.parseDouble(request.getParameter("price"));
         int idCategory = Integer.parseInt(request.getParameter("idCategory"));
@@ -159,8 +165,9 @@ public class ProductServlet extends HttpServlet {
 
         Product newProduct = new Product(id,name,img, quantity, price, idCategory,deleted);
         iProductDAO.updateProduct(newProduct);
-        request.setAttribute("success", "Insert product is success.");
-        request.getRequestDispatcher("/product?action=list").forward(request, response);
+        request.setAttribute("success", "Update Success!");
+        RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/product/edit.jsp");
+        requestDispatcher.forward(request, response);
     }
 
     private void insertProduct(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
@@ -169,8 +176,6 @@ public class ProductServlet extends HttpServlet {
         try {
 
             String name = request.getParameter("name");
-//            String img =request.getParameter("img");
-
             int quantity = 0;
             if (request.getParameter("quantity") != "") {
                 quantity = Integer.parseInt(request.getParameter("quantity"));

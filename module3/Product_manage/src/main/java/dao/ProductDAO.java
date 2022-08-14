@@ -14,8 +14,8 @@ public class ProductDAO implements IProductDAO {
     private static final String INSERT_PRODUCT_SQL = "INSERT INTO product (name,img,quantity,price,idCategory,deleted) VALUES (?,?, ?, ?, ?,?);";
     private static final String SELECT_PRODUCT_BY_ID = "select id,name,img,quantity,price,idCategory,deleted from product where id =?";
     private static final String SELECT_ALL_PRODUCTS = "select * from product where deleted=0";
-//    private static final String DELETE_PRODUCT_SQL = "delete from product where id = ?;";
-    private static final String UPDATE_PRODUCT_SQL = "update product set name = ?,set img = ?,quantity = ?, price =?,idCategory=?,deleted=? where id = ?;";
+    private static final String DELETE_PRODUCT_SQL = "update product set deleted = 1 where id = ?;";
+    private static final String UPDATE_PRODUCT_SQL = "update product set name = ?,img = ?,quantity = ?, price =?,idCategory=?,deleted=? where id = ?;";
     private int noOfRecords;
 
     public ProductDAO() {
@@ -206,29 +206,29 @@ public class ProductDAO implements IProductDAO {
         return noOfRecords;
     }
 
-//    @Override
-//    public boolean deleteProduct(int id) throws SQLException {
-//        boolean rowDeleted;
-//        try (Connection connection = getConnection();
-//             PreparedStatement statement = connection.prepareStatement(DELETE_PRODUCT_SQL);) {
-//            statement.setInt(1, id);
-//            rowDeleted = statement.executeUpdate() > 0;
-//        }
-//        return rowDeleted;
-//    }
+    @Override
+    public boolean deleteProduct(int id) throws SQLException {
+        boolean rowDeleted;
+        try (Connection connection = getConnection();
+             PreparedStatement statement = connection.prepareStatement(DELETE_PRODUCT_SQL);) {
+            statement.setInt(1, id);
+            rowDeleted = statement.executeUpdate() > 0;
+        }
+        return rowDeleted;
+    }
 
     @Override
     public boolean updateProduct(Product product) throws SQLException {
         boolean rowUpdated;
         try (Connection connection = getConnection();
              PreparedStatement statement = connection.prepareStatement(UPDATE_PRODUCT_SQL);) {
-            statement.setInt(1, product.getId());
-            statement.setString(2, product.getName());
-            statement.setString(3, product.getImg());
-            statement.setInt(4, product.getQuantity());
-            statement.setDouble(5, product.getPrice());
-            statement.setInt(6, product.getIdCategory());
-            statement.setInt(7,product.getDeleted());
+            statement.setString(1, product.getName());
+            statement.setString(2, product.getImg());
+            statement.setInt(3, product.getQuantity());
+            statement.setDouble(4, product.getPrice());
+            statement.setInt(5, product.getIdCategory());
+            statement.setInt(6,product.getDeleted());
+            statement.setInt(7, product.getId());
             rowUpdated = statement.executeUpdate() > 0;
         }
         return rowUpdated;
