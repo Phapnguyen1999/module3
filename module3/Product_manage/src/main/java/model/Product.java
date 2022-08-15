@@ -36,6 +36,14 @@ public class Product {
         this.idCategory=idCategory;
         this.deleted=deleted;
     }
+    public Product(int id,String name,int quantity,double price, int idCategory,int deleted){
+        this.id=id;
+        this.name=name;
+        this.quantity=quantity;
+        this.price=price;
+        this.idCategory=idCategory;
+        this.deleted=deleted;
+    }
 
 
     public Product(String name, String img, int quantity, double price, int idCategory) {

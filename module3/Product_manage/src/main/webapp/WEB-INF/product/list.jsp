@@ -128,7 +128,7 @@
                                             <td>
                                                 <a href="/products?action=edit&id=${product.getId()}"
                                                    class="mdi mdi-settings-outline"></a>
-                                                <a href="/products?action=delete&id=${product.getId()}"
+                                                <a href="/products?action=delete&id=${product.getId()}" onclick="return confirm('Are you sure?')"
                                                    class="mdi mdi-delete"></a>
                                             </td>
                                         </tr>
@@ -138,7 +138,6 @@
                                 <script>
 
                                 </script>
-                                <
                                 <div class="row w-100">
                                     <div class="col-12  d-flex justify-content-center border-0 text-white">
                                         <div class="container-fluid mt-2">

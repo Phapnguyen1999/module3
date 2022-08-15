@@ -140,33 +140,103 @@ public class ProductServlet extends HttpServlet {
     }
 
     private void updateProduct(HttpServletRequest request, HttpServletResponse response) throws IOException, SQLException, ServletException {
-        int id=Integer.parseInt(request.getParameter("id"));
-        String name = request.getParameter("name");
-        String img=null;
-        for (Part part : request.getParts()) {
-            System.out.println("Content type of Part" + part.getContentType());
-            System.out.println("Name of Part" + part.getName());
-            if(part.getName().equals("img")){
-                String fileName = extractFileName(part);
-                fileName = new File(fileName).getName();
-                part.write("/Users/macbookpro/Documents/module3/module3/Product_manage/src/main/webapp/images/" + fileName);
-
-                String servletRealPath = this.getServletContext().getRealPath("/") + "/images/" + fileName;
-                System.out.println("servletRealPath: " + servletRealPath);
-                part.write(servletRealPath);
-                img=fileName;
+//        int id=Integer.parseInt(request.getParameter("id"));
+//        String name = request.getParameter("name");
+//        String img=null;
+//        for (Part part : request.getParts()) {
+//            System.out.println("Content type of Part" + part.getContentType());
+//            System.out.println("Name of Part" + part.getName());
+//            if(part.getName().equals("img")){
+//                String fileName = extractFileName(part);
+//                fileName = new File(fileName).getName();
+//                part.write("/Users/macbookpro/Documents/module3/module3/Product_manage/src/main/webapp/images/" + fileName);
+//
+//                String servletRealPath = this.getServletContext().getRealPath("/") + "/images/" + fileName;
+//                System.out.println("servletRealPath: " + servletRealPath);
+//                part.write(servletRealPath);
+//                img=fileName;
+//            }
+//        }
+//        int quantity = Integer.parseInt(request.getParameter("quantity"));
+//        double price = Double.parseDouble(request.getParameter("price"));
+//        int idCategory = Integer.parseInt(request.getParameter("idCategory"));
+//        int deleted=0;
+//
+//        Product newProduct = new Product(id,name,img, quantity, price, idCategory,deleted);
+//        iProductDAO.updateProduct(newProduct);
+//        request.setAttribute("success", "Update Success!");
+//        RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/product/edit.jsp");
+//        requestDispatcher.forward(request, response);
+        Product product = null;
+        HashMap<String, List<String>> errors = new HashMap<>();
+        try {
+            int id=Integer.parseInt(request.getParameter("id"));
+            String name = request.getParameter("name");
+            int quantity = 0;
+            if (!request.getParameter("quantity").equals("")) {
+                quantity = Integer.parseInt(request.getParameter("quantity"));
             }
-        }
-        int quantity = Integer.parseInt(request.getParameter("quantity"));
-        double price = Double.parseDouble(request.getParameter("price"));
-        int idCategory = Integer.parseInt(request.getParameter("idCategory"));
-        int deleted=0;
+            int idcategory = Integer.parseInt(request.getParameter("idCategory"));
+            double price = 0;
+            if (!request.getParameter("price").equals("")) {
+                price = Double.parseDouble(request.getParameter("price"));
+            }
+            int deleted =0;
+            product = new Product(id,name, quantity, price,idcategory,deleted);
+            for (Part part : request.getParts()) {
+                System.out.println("Content type of Part" + part.getContentType());
+                System.out.println("Name of Part" + part.getName());
+                if(part.getName().equals("img")){
+                    String fileName = extractFileName(part);
+                    if(!fileName.equals(""))
+                    {
+                        fileName = new File(fileName).getName();
+                        part.write("/Users/macbookpro/Documents/module3/module3/Product_manage/src/main/webapp/images/" + fileName);
 
-        Product newProduct = new Product(id,name,img, quantity, price, idCategory,deleted);
-        iProductDAO.updateProduct(newProduct);
-        request.setAttribute("success", "Update Success!");
-        RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/product/edit.jsp");
-        requestDispatcher.forward(request, response);
+                        String servletRealPath = this.getServletContext().getRealPath("/") + "images/" + fileName;
+                        System.out.println("servletRealPath: " + servletRealPath);
+                        part.write(servletRealPath);
+                        product.setImg(fileName);
+                    }else{
+                        product.setImg("tv soni.png");
+                    }
+                }
+            }
+
+            ValidatorFactory validatorFactory = Validation.buildDefaultValidatorFactory();
+            Validator validator = validatorFactory.getValidator();
+
+            Set<ConstraintViolation<Product>> constraintViolations = validator.validate(product);
+
+            if (!constraintViolations.isEmpty()) {
+
+                request.setAttribute("errors", "MUST NOT BE BRANDED!");
+                errors = getErrorFromContraint(constraintViolations);
+                request.setAttribute("errors", errors);
+                request.setAttribute("product", product);
+                RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/product/create.jsp");
+                requestDispatcher.forward(request, response);
+            } else {
+                iProductDAO.updateProduct(product);
+                Product pro = new Product();
+                request.setAttribute("product", pro);
+                request.setAttribute("success", "Insert Success!");
+                RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/product/create.jsp");
+                requestDispatcher.forward(request, response);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (NumberFormatException ex) {
+            System.out.println(this.getClass() + " NumberFormatException: User info from request: " + product);
+            List<String> listErrors = Arrays.asList("Number format not right!");
+            errors.put("Exception", listErrors);
+
+            request.setAttribute("product", product);
+            request.setAttribute("errors", errors);
+            request.getRequestDispatcher("/WEB-INF/product/create.jsp").forward(request, response);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
     private void insertProduct(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
@@ -176,12 +246,12 @@ public class ProductServlet extends HttpServlet {
 
             String name = request.getParameter("name");
             int quantity = 0;
-            if (request.getParameter("quantity") != "") {
+            if (!request.getParameter("quantity").equals("")) {
                 quantity = Integer.parseInt(request.getParameter("quantity"));
             }
             int idcategory = Integer.parseInt(request.getParameter("idCategory"));
             double price = 0;
-            if (request.getParameter("price") != "") {
+            if (!request.getParameter("price").equals("")) {
                 price = Double.parseDouble(request.getParameter("price"));
             }
             int deleted =0;
@@ -190,16 +260,22 @@ public class ProductServlet extends HttpServlet {
                 System.out.println("Content type of Part" + part.getContentType());
                 System.out.println("Name of Part" + part.getName());
                 if(part.getName().equals("img")){
-                    String fileName = extractFileName(part);
-                    fileName = new File(fileName).getName();
-                    part.write("/Users/macbookpro/Documents/module3/module3/Product_manage/src/main/webapp/images/" + fileName);
+                        String fileName = extractFileName(part);
+                        if(!fileName.equals(""))
+                        {
+                            fileName = new File(fileName).getName();
+                            part.write("/Users/macbookpro/Documents/module3/module3/Product_manage/src/main/webapp/images/" + fileName);
 
-                    String servletRealPath = this.getServletContext().getRealPath("/") + "images/" + fileName;
-                    System.out.println("servletRealPath: " + servletRealPath);
-                    part.write(servletRealPath);
-                    product.setImg(fileName);
+                            String servletRealPath = this.getServletContext().getRealPath("/") + "images/" + fileName;
+                            System.out.println("servletRealPath: " + servletRealPath);
+                            part.write(servletRealPath);
+                            product.setImg(fileName);
+                        }else{
+                            product.setImg("tv soni.png");
+                        }
                 }
             }
+
             ValidatorFactory validatorFactory = Validation.buildDefaultValidatorFactory();
             Validator validator = validatorFactory.getValidator();
 
@@ -232,7 +308,7 @@ public class ProductServlet extends HttpServlet {
             request.setAttribute("errors", errors);
             request.getRequestDispatcher("/WEB-INF/product/create.jsp").forward(request, response);
         } catch (Exception ex) {
-
+            ex.printStackTrace();
         }
     }
     private String extractFileName(Part part) {

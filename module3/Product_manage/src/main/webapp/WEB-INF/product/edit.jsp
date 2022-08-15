@@ -115,7 +115,7 @@
                                             <label class="col-md-2 control-label">Image</label>
                                             <div class="col-md-10">
                                                 <input type="file" class="" name="img"
-                                                       value="${product.getImg()}">
+                                                       >
                                             </div>
                                         </div>
                                         <div class="form-group row">
